@@ -74,7 +74,7 @@ def sign_out():
 
 
 @app.route('/data', methods=['GET'])
-def sign_out():
+def get_data():
     if 'user' in session:
         return 'secret info', 200
     return 'unauthorized', 401

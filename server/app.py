@@ -1,5 +1,5 @@
 from os import getenv
-from flask import Flask
+from flask import Flask, session
 from flask.globals import request
 from flask_pymongo import PyMongo
 from flask_cors import CORS
@@ -9,6 +9,7 @@ app = Flask(__name__)
 CORS(app)
 app.config['MONGO_URI'] = getenv('DATABASE_URL')
 mongo = PyMongo(app)
+app.secret_key = getenv('SECRET_KEY')
 
 
 @app.route('/signup', methods=['POST'])
@@ -54,9 +55,19 @@ def sign_in():
     user = users_collection.find_one({'email': user_response.get('email')})
     if user:
         if(check_password_hash(user['password'], user_response.get('password'))):
+            user.pop('_id')
+            user.pop('password')
+            session['user'] = user
             return 'authenticated', 200
 
     return 'incorrect credentials', 403
+
+
+@app.route('/signout', methods=['POST'])
+def sign_out():
+    if 'user' in session:
+        session.pop('user')
+    return 'signed out', 200
 
 
 if __name__ == 'main':

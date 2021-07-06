@@ -6,8 +6,11 @@ from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-CORS(app)
 app.config['MONGO_URI'] = getenv('DATABASE_URL')
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True)
+CORS(app, supports_credentials=True)
 mongo = PyMongo(app)
 app.secret_key = getenv('SECRET_KEY')
 
@@ -55,10 +58,10 @@ def sign_in():
     user = users_collection.find_one({'email': user_response.get('email')})
     if user:
         if(check_password_hash(user['password'], user_response.get('password'))):
-            user.pop('_id')
-            user.pop('password')
-            session['user'] = user
-            return 'authenticated', 200
+            session['user'] = {'email': user.get('email')}
+            return {'email': user.get('email'),
+                    'fname': user.get('first_name'),
+                    'lname': user.get('last_name')}, 200
 
     return 'incorrect credentials', 403
 
@@ -68,6 +71,13 @@ def sign_out():
     if 'user' in session:
         session.pop('user')
     return 'signed out', 200
+
+
+@app.route('/data', methods=['GET'])
+def sign_out():
+    if 'user' in session:
+        return 'secret info', 200
+    return 'unauthorized', 401
 
 
 if __name__ == 'main':

@@ -1,4 +1,3 @@
-from flask import json
 from flask.testing import FlaskClient
 import pytest
 from app import create_app

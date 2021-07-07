@@ -23,6 +23,8 @@ const Signin = () => {
             lname: res.data.lname,
           });
           history.push('/');
+        } else {
+          alert(res.data);
         }
       })
       .catch((err) => {

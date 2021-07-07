@@ -24,10 +24,12 @@ const Signup = () => {
         // if successfull then redirect to signin page
         if (res.status === 200) {
           history.push('/signin');
+        } else {
+          alert(res.data);
         }
       })
       .catch((err) => {
-        console.log(err.response.data);
+        alert(err.response.data);
       });
   };
 

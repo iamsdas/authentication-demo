@@ -15,14 +15,13 @@ const Signin = () => {
     axios
       .post(`${url}/signin`, { email, password }, { withCredentials: true })
       .then((res) => {
+        // if successfull then set user state and redirect to '/'
         if (res.status === 200) {
-          const a = {
+          setUser({
             email,
             fname: res.data.fname,
             lname: res.data.lname,
-          };
-          console.log(a);
-          setUser(a);
+          });
           history.push('/');
         }
       })
@@ -33,6 +32,7 @@ const Signin = () => {
 
   return (
     <div className='min-h-screen bg-gradient-to-r from-gray-200 to-gray-300 flex justify-center items-center text-gray-700'>
+      {/* card ui */}
       <div className='max-w-2xl bg-white p-4 font-medium rounded-lg'>
         <div className='text-5xl pb-6'>
           <span className='uppercase font-bold block border-gray-600 text-gray-700 text-center'>
@@ -40,6 +40,7 @@ const Signin = () => {
           </span>
         </div>
         <form className='block text-lg' onSubmit={formSubmit}>
+          {/* email */}
           <div className='pb-2'>
             <label htmlFor='email' className='text-md'>
               Email
@@ -56,6 +57,7 @@ const Signin = () => {
               }}
             />
           </div>
+          {/* password */}
           <div className='pb-8'>
             <label htmlFor='password' className='text-md'>
               Password
@@ -72,6 +74,7 @@ const Signin = () => {
               }}
             />
           </div>
+          {/* sign in button */}
           <button
             type='submit'
             className='uppercase text-white border-4 border-gray-700 bg-gray-700 hover:border-gray-800 hover:bg-gray-800 rounded-xl px-3 py-2 font-semibold w-full'>

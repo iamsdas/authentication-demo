@@ -7,6 +7,7 @@ import Signup from './components/Signup';
 export const UserContext = React.createContext();
 
 function App() {
+  // create a global user state
   const [user, setUser] = useState(null);
   return (
     <UserContext.Provider value={{ user, setUser }}>

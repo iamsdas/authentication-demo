@@ -6,10 +6,11 @@ from extentions import mongo
 main = Blueprint('main', __name__)
 
 
+# API route for user signup
 @main.route('/signup', methods=['POST'])
 def sign_up():
     required_fields = ['first_name', 'last_name', 'email', 'password']
-    user_response = request.get_json()
+    user_response = request.get_json()  # sent from the client
     users_collection = mongo.db.users
     new_user = {}
 
@@ -33,6 +34,7 @@ def sign_up():
     return 'added user', 200
 
 
+# API route for user signin
 @main.route('/signin', methods=['POST'])
 def sign_in():
     required_fields = ['email', 'password']
@@ -57,8 +59,9 @@ def sign_in():
     return 'incorrect credentials', 403
 
 
+# API route for signing out
 @main.route('/signout', methods=['POST'])
 def sign_out():
     if 'user' in session:
-        session.pop('user')
+        session.pop('user')  # clear session details
     return 'signed out', 200
